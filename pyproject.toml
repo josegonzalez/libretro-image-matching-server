@@ -13,7 +13,7 @@ uvicorn = "^0.27.0"
 fastapi-cache2 = "^0.2.1"
 beautifulsoup4 = "^4.12.0"
 requests = "^2.31.0"
-thefuzz = "^0.20.0"
+thefuzz = "^0.22.1"
 python-Levenshtein = "^0.23.0"
 
 [build-system]
