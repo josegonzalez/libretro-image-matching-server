@@ -22,6 +22,14 @@ dependencies = [
 [tool.poetry]
 package-mode = false
 
+[tool.poetry.group.main.dependencies]
+uvicorn = "0.34.0"
+fastapi = "0.115.12"
+fastapi-cache2 = "0.2.1"
+beautifulsoup4 = "4.12.0"
+requests = "2.31.0"
+thefuzz = "0.22.1"
+
 [build-system]
 requires = ["poetry-core"]
 build-backend = "poetry.core.masonry.api"
