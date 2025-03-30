@@ -12,6 +12,9 @@ dev:
 build:
 	BUILDKIT_HOST="docker-container://buildkit" railpack build --name savant/libretro-image-matching-server:latest --progress plain .
 
+docker-run:
+	docker run -it --rm savant/libretro-image-matching-server:latest
+
 buildkit:
 	docker run --rm --privileged -d --name buildkit moby/buildkit || true
 
