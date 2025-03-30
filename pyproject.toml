@@ -1,0 +1,21 @@
+[tool.poetry]
+name = "libretro-image-matching-server"
+version = "0.1.0"
+description = "A FastAPI server that matches game ROM names with their corresponding thumbnail images from the Libretro thumbnails database"
+authors = ["Your Name <your.email@example.com>"]
+readme = "README.md"
+packages = [{ include = "main.py", from = "." }]
+
+[tool.poetry.dependencies]
+python = "^3.11"
+fastapi = "^0.109.0"
+uvicorn = "^0.27.0"
+fastapi-cache2 = "^0.2.1"
+beautifulsoup4 = "^4.12.0"
+requests = "^2.31.0"
+thefuzz = "^0.20.0"
+python-Levenshtein = "^0.23.0"
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"

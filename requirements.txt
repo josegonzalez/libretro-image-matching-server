@@ -1,5 +1,0 @@
-fastapi[standard]
-thefuzz
-requests
-bs4
-fastapi-cache2
