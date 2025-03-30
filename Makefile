@@ -1,8 +1,10 @@
+PORT ?= 5000
+
 install:
 	pip install -r requirements.txt
 
 run:
-	uvicorn main:app --reload
+	uvicorn main:app --host 0.0.0.0 --port $(PORT)
 
 dev:
 	fastapi dev main.py
