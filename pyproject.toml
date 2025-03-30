@@ -8,7 +8,7 @@ packages = [{ include = "main.py", from = "." }]
 
 [tool.poetry.dependencies]
 python = "^3.11"
-fastapi = "^0.109.0"
+fastapi = "^0.115.12"
 uvicorn = "^0.27.0"
 fastapi-cache2 = "^0.2.1"
 beautifulsoup4 = "^4.12.0"
