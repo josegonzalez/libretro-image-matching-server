@@ -1,20 +1,26 @@
-[tool.poetry]
+[project]
 name = "libretro-image-matching-server"
 version = "0.1.0"
 description = "A FastAPI server that matches game ROM names with their corresponding thumbnail images from the Libretro thumbnails database"
-authors = ["Your Name <your.email@example.com>"]
+authors = [
+    { name = "Jose Diaz-Gonzalez", email = "libretro-image-matching-server@josediazgonzalez.com" },
+]
 readme = "README.md"
-packages = [{ include = "main.py", from = "." }]
 
-[tool.poetry.dependencies]
-python = "^3.11"
-fastapi = "^0.115.12"
-uvicorn = "^0.34.0"
-fastapi-cache2 = "^0.2.1"
-beautifulsoup4 = "^4.12.0"
-requests = "^2.31.0"
-thefuzz = "^0.22.1"
-python-Levenshtein = "^0.27.1"
+requires-python = ">=3.9,<4.0"
+
+dependencies = [
+    "fastapi>=0.115.12",
+    "uvicorn>=0.34.0",
+    "fastapi-cache2>=0.2.1",
+    "beautifulsoup4>=4.12.0",
+    "requests>=2.31.0",
+    "thefuzz>=0.22.1",
+    "python-Levenshtein>=0.27.1",
+]
+
+[tool.poetry]
+package-mode = false
 
 [build-system]
 requires = ["poetry-core"]
