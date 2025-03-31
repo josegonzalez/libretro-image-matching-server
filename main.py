@@ -26,7 +26,6 @@ from thefuzz import fuzz, process
 
 from logging_config import setup_logging
 
-# Set up logging configuration
 setup_logging()
 logger = logging.getLogger(__name__)
 
@@ -87,6 +86,10 @@ rom_mapping = {
     "SUPERVISION": "Watara - Supervision",
     "WSC": "Bandai - WonderSwan Color",
     "X68000": "Sharp - X68000",
+}
+
+common_renames = {
+    "Megaman": "Mega Man",
 }
 
 
@@ -166,6 +169,9 @@ def scrub_game_name(game_name: str) -> str:
     # remove the contents inside of parenthesis or brackets
     game_name = re.sub(r"\s*\([^)]*\)", "", game_name)
     game_name = re.sub(r"\s*\[[^\]]*\]", "", game_name)
+
+    for old_name, new_name in common_renames.items():
+        game_name = game_name.replace(old_name, new_name)
 
     return game_name.strip()
 
