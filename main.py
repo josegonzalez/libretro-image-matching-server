@@ -137,7 +137,7 @@ async def handle_rom_list(console: str, image_type: str, request: Request):
     """
     body = await request.body()
 
-    matches = await process_game_list(console, body, image_type)
+    matches, games = await process_game_list(console, body, image_type)
 
     if request.headers.get("content-type") == "text/plain":
         output = [f"{game}\t{matches[game]}" for game in matches]
@@ -189,11 +189,13 @@ async def process_game_list(
     Process the game list.
     """
     games = [game.strip() for game in body.decode("utf-8").split("\n") if game.strip()]
+    games = [game for game in games if not game.startswith(".")]
+    games = [game for game in games if game != "neogeo.zip"]
 
     mapped_console = rom_mapping.get(console, None)
     if not mapped_console:
         logger.warning("no mapped console found", extra={"console": console})
-        return {}
+        return {}, {}
 
     image_folders = {
         "boxart": "Named_Boxarts",
@@ -203,7 +205,7 @@ async def process_game_list(
     image_folder = image_folders.get(image_type, None)
     if not image_folder:
         logger.warning("no image folder found", extra={"image_type": image_type})
-        return {}
+        return {}, {}
 
     base_url = f"https://thumbnails.libretro.com/{mapped_console}/{image_folder}/"
     quoted_base_url = urllib.parse.quote(base_url, safe=":/")
@@ -211,28 +213,69 @@ async def process_game_list(
     game_mapping = await get_games_from_libretro(base_url)
     if len(game_mapping) == 0:
         logger.warning("no games found", extra={"console": console})
-        return {}
-
-    game_names = list(game_mapping.keys())
+        return {}, {}
 
     matches = {}
 
-    logger.info("processing console", extra={"console": console})
+    fuzzers = [
+        fuzz.ratio,
+        fuzz.partial_ratio,
+        fuzz.token_sort_ratio,
+        fuzz.token_set_ratio,
+        fuzz.partial_token_sort_ratio,
+    ]
+
+    exact_matches = []
+    all_games = games.copy()
+    for game in games:
+        scrubbed_game = scrub_game_name(game)
+        exact_match = game_mapping.get(scrubbed_game, None)
+        if exact_match:
+            matches[game] = f"{quoted_base_url}{exact_match}"
+            del game_mapping[scrubbed_game]
+            exact_matches.append(game)
+
+    for exact_match in exact_matches:
+        games.remove(exact_match)
+
+    game_names = list(game_mapping.keys())
     for game in games:
         scrubbed_game = scrub_game_name(game)
 
-        best_match = process.extractOne(
-            scrubbed_game, game_names, scorer=fuzz.partial_token_sort_ratio
-        )
+        best_match = None
+        for fuzzer in fuzzers:
+            best_match = process.extractOne(scrubbed_game, game_names, scorer=fuzzer)
+
+            if best_match[1] < MIN_MATCH_SCORE:
+                logger.warning(
+                    "score too low",
+                    extra={
+                        "game": game,
+                        "scrubbed_game": scrubbed_game,
+                        "score": best_match[1],
+                        "best_match": best_match[0],
+                    },
+                )
+                continue
+
+            break
+
         if not best_match:
-            logger.warning("no match found", extra={"game": scrubbed_game})
+            logger.warning(
+                "no match found",
+                extra={
+                    "game": game,
+                    "scrubbed_game": scrubbed_game,
+                },
+            )
             continue
 
         if best_match[1] < MIN_MATCH_SCORE:
             logger.warning(
-                "score too low",
+                "score too low, no match found",
                 extra={
-                    "game": scrubbed_game,
+                    "game": game,
+                    "scrubbed_game": scrubbed_game,
                     "score": best_match[1],
                     "best_match": best_match[0],
                 },
@@ -242,4 +285,4 @@ async def process_game_list(
         image_name = game_mapping[best_match[0]]
         matches[game] = f"{quoted_base_url}{image_name}"
 
-    return matches
+    return matches, all_games
