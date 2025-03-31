@@ -1,4 +1,5 @@
-PORT ?= 5000
+PORT ?= 8000
+EMU ?= FC
 
 install:
 	pip install -r requirements.txt
@@ -18,14 +19,8 @@ docker-run:
 buildkit:
 	docker run --rm --privileged -d --name buildkit moby/buildkit || true
 
-curl-text-gb:
-	curl -i -X POST -H "Content-Type: text/plain" http://127.0.0.1:8000/matches/GB/snap --data-binary "@GB.txt"
+curl-text:
+	curl -i -X POST -H "Content-Type: text/plain" http://127.0.0.1:$(PORT)/matches/$(EMU)/snap --data-binary "@fixtures/$(EMU).txt"
 
-curl-json-gb:
-	curl -i -X POST http://127.0.0.1:8000/matches/GB/snap --data-binary "@GB.txt"
-
-curl-text-sfc:
-	curl -i -X POST -H "Content-Type: text/plain" http://127.0.0.1:8000/matches/SFC/snap --data-binary "@SFC.txt"
-
-curl-json-sfc:
-	curl -i -X POST http://127.0.0.1:8000/matches/SFC/snap --data-binary "@SFC.txt"
+curl-json:
+	curl -i -X POST http://127.0.0.1:$(PORT)/matches/$(EMU)/snap --data-binary "@fixtures/$(EMU).txt"
