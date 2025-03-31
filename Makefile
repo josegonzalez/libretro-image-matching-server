@@ -4,10 +4,10 @@ install:
 	pip install -r requirements.txt
 
 run:
-	uvicorn main:app --host 0.0.0.0 --port $(PORT)
+	poetry run uvicorn main:app --host 0.0.0.0 --port $(PORT)
 
 dev:
-	fastapi dev main.py
+	poetry run fastapi dev main.py
 
 build:
 	BUILDKIT_HOST="docker-container://buildkit" railpack build --name savant/libretro-image-matching-server:latest --progress plain .
