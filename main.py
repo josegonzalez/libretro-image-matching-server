@@ -129,14 +129,14 @@ class PrettyJSONResponse(Response):
         ).encode("utf-8")
 
 
-@app.post("/matches/{console}")
+@app.post("/matches/{console}/{image_type}")
 async def handle_rom_list(console: str, request: Request):
     """
     Handle the rom list page.
     """
     body = await request.body()
 
-    matches = await process_game_list(console, body)
+    matches = await process_game_list(console, body, image_type)
 
     if request.headers.get("content-type") == "text/plain":
         output = [f"{game}\t{matches[game]}" for game in matches]
@@ -181,7 +181,9 @@ def get_games_from_libretro(base_url: str) -> dict[str, str]:
     return game_mapping
 
 
-async def process_game_list(console: str, body: bytes) -> dict[str, str]:
+async def process_game_list(
+    console: str, body: bytes, image_type: str
+) -> dict[str, str]:
     """
     Process the game list.
     """
@@ -192,7 +194,17 @@ async def process_game_list(console: str, body: bytes) -> dict[str, str]:
         logger.warning("no mapped console found", extra={"console": console})
         return {}
 
-    base_url = f"https://thumbnails.libretro.com/{mapped_console}/Named_Snaps/"
+    image_folders = {
+        "boxart": "Named_Boxarts",
+        "snap": "Named_Snaps",
+        "title": "Named_Titles",
+    }
+    image_folder = image_folders.get(image_type, None)
+    if not image_folder:
+        logger.warning("no image folder found", extra={"image_type": image_type})
+        return {}
+
+    base_url = f"https://thumbnails.libretro.com/{mapped_console}/{image_folder}/"
 
     game_mapping = await get_games_from_libretro(base_url)
     if len(game_mapping) == 0:
