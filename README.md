@@ -50,7 +50,7 @@ Matches a list of ROM filenames with their corresponding thumbnail images.
 Example request:
 
 ```bash
-curl -X POST http://localhost:8000/matches/GB \
+curl -X POST http://localhost:8000/matches/GB/snap \
   -d "Pokemon Red (USA).gb
 Pokemon Blue (USA).gb"
 ```

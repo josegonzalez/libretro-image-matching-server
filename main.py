@@ -130,7 +130,7 @@ class PrettyJSONResponse(Response):
 
 
 @app.post("/matches/{console}/{image_type}")
-async def handle_rom_list(console: str, request: Request):
+async def handle_rom_list(console: str, image_type: str, request: Request):
     """
     Handle the rom list page.
     """
