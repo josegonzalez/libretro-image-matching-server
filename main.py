@@ -237,9 +237,9 @@ async def process_game_list(
 
     fuzzers = [
         fuzz.ratio,
-        fuzz.partial_ratio,
         fuzz.token_sort_ratio,
         fuzz.token_set_ratio,
+        fuzz.partial_ratio,
         fuzz.partial_token_sort_ratio,
     ]
 
