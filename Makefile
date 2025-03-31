@@ -18,8 +18,9 @@ docker-run:
 buildkit:
 	docker run --rm --privileged -d --name buildkit moby/buildkit || true
 
+
 curl-text-sfc:
-	curl -i -X POST -H "Content-Type: text/plain" http://127.0.0.1:8000/matches/SFC --data-binary "@SFC.txt"
+	curl -i -X POST -H "Content-Type: text/plain" http://127.0.0.1:8000/matches/SFC/snap --data-binary "@SFC.txt"
 
 curl-json-sfc:
-	curl -i -X POST http://127.0.0.1:8000/matches/SFC --data-binary "@SFC.txt"
+	curl -i -X POST http://127.0.0.1:8000/matches/SFC/snap --data-binary "@SFC.txt"
