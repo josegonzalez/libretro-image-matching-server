@@ -12,6 +12,7 @@ import json
 import logging
 import re
 import typing
+import urllib.parse
 from collections.abc import AsyncIterator
 from contextlib import asynccontextmanager
 
@@ -205,6 +206,7 @@ async def process_game_list(
         return {}
 
     base_url = f"https://thumbnails.libretro.com/{mapped_console}/{image_folder}/"
+    quoted_base_url = urllib.parse.quote(base_url, safe=":/")
 
     game_mapping = await get_games_from_libretro(base_url)
     if len(game_mapping) == 0:
@@ -238,6 +240,6 @@ async def process_game_list(
             continue
 
         image_name = game_mapping[best_match[0]]
-        matches[game] = f"{base_url}{image_name}"
+        matches[game] = f"{quoted_base_url}{image_name}"
 
     return matches
