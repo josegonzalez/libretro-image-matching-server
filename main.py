@@ -165,6 +165,7 @@ def get_games_from_libretro(base_url: str) -> dict[str, str]:
     """
     Get the games from the libretro api.
     """
+    logger.info("getting games from libretro", extra={"base_url": base_url})
     response = requests.get(base_url, timeout=10)
     if response.status_code != 200:
         return {}
