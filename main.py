@@ -30,7 +30,7 @@ from logging_config import setup_logging
 setup_logging()
 logger = logging.getLogger(__name__)
 
-MIN_MATCH_SCORE = 80
+MIN_MATCH_SCORE = 90
 
 
 rom_mapping = {
