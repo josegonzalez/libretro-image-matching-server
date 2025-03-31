@@ -143,7 +143,18 @@ async def handle_rom_list(console: str, image_type: str, request: Request):
         output = [f"{game}\t{matches[game]}" for game in matches]
         return Response("\n".join(output), media_type="text/plain")
 
-    return PrettyJSONResponse({"console": console, "matches": matches})
+    return PrettyJSONResponse(
+        {
+            "data": {
+                "console": console,
+                "matches": matches,
+            },
+            "stats": {
+                "total_games": len(games),
+                "total_matches": len(matches.keys()),
+            },
+        }
+    )
 
 
 def scrub_game_name(game_name: str) -> str:
