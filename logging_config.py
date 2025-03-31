@@ -8,6 +8,20 @@ import sys
 from typing import Any, Dict
 
 
+def make_record_with_extra(
+    self, name, level, fn, lno, msg, args, exc_info, func=None, extra=None, sinfo=None
+):
+    record = original_makeRecord(
+        self, name, level, fn, lno, msg, args, exc_info, func, extra, sinfo
+    )
+    record._extra = extra
+    return record
+
+
+original_makeRecord = logging.Logger.makeRecord
+logging.Logger.makeRecord = make_record_with_extra
+
+
 class JSONFormatter(logging.Formatter):
     """
     A formatter that outputs JSON strings after parsing the LogRecord.
@@ -90,6 +104,10 @@ class JSONFormatter(logging.Formatter):
             "function": record.funcName,
             "line": record.lineno,
         }
+
+        if hasattr(record, "_extra") and record._extra:
+            for key, value in record._extra.items():
+                log_data[key] = value
 
         if record.name == "uvicorn.access":
             if record.module == "httptools_impl":
