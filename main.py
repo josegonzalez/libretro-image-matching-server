@@ -33,6 +33,7 @@ MIN_MATCH_SCORE = 90
 
 
 rom_mapping = {
+    "PUAE": "Commodore - Amiga",
     "AMIGA": "Commodore - Amiga",
     "FBN": "FBNeo - Arcade Games",
     "CPC": "Amstrad - CPC",
@@ -40,6 +41,7 @@ rom_mapping = {
     "FIFTYTWOHUNDRED": "Atari - 5200",
     "LYNX": "Atari - Lynx",
     "COLECO": "Coleco - ColecoVision",
+    "C64": "Commodore - 64",
     "COMMODORE": "Commodore - 64",
     "DOS": "DOS",
     "DOOM": "DOOM",
