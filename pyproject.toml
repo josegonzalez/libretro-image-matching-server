@@ -24,7 +24,7 @@ package-mode = false
 
 [tool.poetry.group.main.dependencies]
 uvicorn = "0.34.3"
-fastapi = "0.115.12"
+fastapi = "0.115.13"
 fastapi-cache2 = "0.2.2"
 beautifulsoup4 = "4.13.4"
 requests = "2.32.4"
