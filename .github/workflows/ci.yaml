@@ -16,7 +16,7 @@ jobs:
 
       - name: Generate docker metadata
         id: docker_meta
-        uses: docker/metadata-action@v5
+        uses: docker/metadata-action@v6
         with:
           images: dokku/ci-docker-image
 
